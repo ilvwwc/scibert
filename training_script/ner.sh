@@ -1,15 +1,19 @@
+# delete the old output dir
+rm -r expriments/ner
+
 # seeds
 export SEED=42
 export PYTORCH_SEED=42
 export NUMPY_SEED=42
 
 # model
-export BERT=scibert-base-uncased
+export BERT=bert-base-uncased
 
 # data
-export TRAIN_PATH=data/ner/bc5cdr/train.txt
-export DEV_PATH=data/ner/bc5cdr/dev.txt
-export TEST_PATH=data/ner/bc5cdr/test.txt
+export SCHEME=IOB1
+export TRAIN_PATH=data/ner/JNLPBA/train.txt
+export DEV_PATH=data/ner/JNLPBA/dev.txt
+export TEST_PATH=data/ner/JNLPBA/test.txt
 
 # train
 export NUM_EPOCHS=30

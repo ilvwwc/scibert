@@ -5,7 +5,7 @@
   "dataset_reader": {
     "type": "conll2003",
     "tag_label": "ner",
-    "coding_scheme": "BIOUL",
+    "coding_scheme": std.extVar("SCHEME"),
     "token_indexers": {
       "bert": {
           "type": "pretrained_transformer_mismatched",
@@ -18,12 +18,9 @@
   "test_data_path": std.extVar("TEST_PATH"),
   "evaluate_on_test": true,
   "model": {
-    "type": "crf_tagger",
-    "label_encoding": "BIOUL",
-    "constrain_crf_decoding": true,
+    "type": "simple_tagger",
+    "label_encoding": "BIO",
     "calculate_span_f1": true,
-    "dropout": 0.5,
-    "include_start_end_transitions": false,
     "text_field_embedder": {
         "token_embedders": {
             "bert": {
@@ -41,22 +38,18 @@
         "bidirectional": true
     }
   },
-  "iterator": {
-    "type": "bucket",
-    "sorting_keys": [["tokens", "num_tokens"]],
-    "batch_size": std.extVar("BATCH_SIZE"),
-    "cache_instances": true
+  "data_loader": {
+    "batch_size": std.parseInt(std.extVar("BATCH_SIZE")),
+    "shuffle": true
   },
   "trainer": {
     "type": "gradient_descent",
     "optimizer": {
-        "type": "adam2",
-        "lr": std.extVar("LEARNING_RATE")
+        "type": "adamw",
+        "lr": std.parseJson(std.extVar("LEARNING_RATE")),
     },
     "validation_metric": "+f1-measure-overall",
-    "num_serialized_models_to_keep": 3,
     "num_epochs": std.parseInt(std.extVar("NUM_EPOCHS")),
-    "should_log_learning_rate": true,
     "patience": 10,
     "cuda_device": std.parseInt(std.extVar("CUDA_DEVICE"))
   }
