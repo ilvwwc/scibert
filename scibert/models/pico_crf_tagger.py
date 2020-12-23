@@ -15,6 +15,7 @@ from allennlp.training.metrics import CategoricalAccuracy, F1Measure
 
 logger = logging.getLogger(__name__)
 
+
 @Model.register("pico_crf_tagger")
 class PicoCrfTagger(Model):
     """
@@ -28,6 +29,7 @@ class PicoCrfTagger(Model):
     - No option for `verbose_metrics`.  Defaults to printing all because in PICO,
       we want to see F1 scores for each class.
     """
+
     def __init__(self, vocab: Vocabulary,
                  text_field_embedder: TextFieldEmbedder,
                  encoder: Seq2SeqEncoder,
@@ -48,7 +50,8 @@ class PicoCrfTagger(Model):
         # crf
         output_dim = self.encoder.get_output_dim()
         self.tag_projection_layer = TimeDistributed(Linear(output_dim, self.num_tags))
-        self.crf = ConditionalRandomField(self.num_tags, constraints=None, include_start_end_transitions=include_start_end_transitions)
+        self.crf = ConditionalRandomField(self.num_tags, constraints=None,
+                                          include_start_end_transitions=include_start_end_transitions)
 
         self.metrics = {
             "accuracy": CategoricalAccuracy(),
@@ -104,7 +107,6 @@ class PicoCrfTagger(Model):
             output["words"] = [x["words"] for x in metadata]
         return output
 
-    @overrides
     def decode(self, output_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
         """
         Converts the tag ids to the actual tags.

@@ -195,7 +195,6 @@ class BertCrfTagger(Model):
             output["words"] = [x["words"] for x in metadata]
         return output
 
-    @overrides
     def decode(self, output_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
         """
         Converts the tag ids to the actual tags.
